@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./shelly_back
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./shelly_back:/app
+    environment:
+      - DATABASE_URL=sqlite:///./chat.db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend 
